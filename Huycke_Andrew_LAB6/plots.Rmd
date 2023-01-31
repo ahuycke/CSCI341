@@ -1,0 +1,36 @@
+---
+title: "Lab6Plots"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# Clear workspace
+rm(list = ls()) 
+
+# your code will be included in the html for this assignment
+knitr::opts_chunk$set(echo=TRUE) 
+
+# load packages we need for this lab
+library(mosaic, warn.conflicts = FALSE) 
+library(ggformula, warn.conflicts = FALSE)
+library(Lock5Data, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+```
+
+```{r}
+data <- read.csv("cache_performance.csv", header=TRUE)
+```
+
+```{r}
+gf_boxplot(data$Cache_Hit_Rate ~ as.factor(data$Cache_Size), xlab="Cache Size (KiB)", ylab="Cache Hit Rate")
+gf_boxplot(data$Cache_Hit_Rate ~ as.factor(data$Block_Size), xlab="Block Size (words)", ylab="Cache Hit Rate")
+gf_boxplot(data$Cache_Hit_Rate ~ as.factor(data$Associativity), xlab="Associativity", ylab="Cache Hit Rate")
+gf_boxplot(data$Cache_Hit_Rate ~ as.factor(data$Replacement_Policy), xlab="Replacement Policy", ylab="Cache Hit Rate")
+```
+```{r}
+model <- lm(data$Cache_Hit_Rate ~ as.factor(data$Cache_Size) + as.factor(data$Block_Size) + as.factor(data$Associativity) + data$Replacement_Policy)
+summary(model)
+model2 <- lm(data$Cache_Hit_Rate ~ data$Cache_Size + data$Block_Size + data$Associativity + data$Replacement_Policy)
+summary(model2)
+```
+
